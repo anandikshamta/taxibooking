@@ -1,0 +1,86 @@
+.cardbox
+{
+	border:2px solid #30ACA4;
+	padding:20px;
+	font-size:13px;
+	margin-right:1px;
+	border-radius: 25px;
+}
+.cardbox .form-control
+{
+	font-size:13px;
+}
+.cardbox label
+{
+	font-weight:600;
+}
+.sw-theme-arrows .sw-toolbar
+{
+	padding-right:5em;
+}
+.sw-btn-next {
+    background-color: #30ACA4;
+    border: none;
+}
+.price {
+    list-style-type: none;
+    border: 1px solid #eee;
+    margin: 0;
+    padding: 0;
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
+}
+
+.price:hover {
+    box-shadow: 0 8px 12px 0 rgba(0,0,0,0.2)
+}
+
+.price .header {
+    background-color: #111;
+    color: white;
+    font-size: 25px;
+}
+
+.price li {
+    border-bottom: 1px solid #eee;
+    padding: 20px;
+    text-align: center;
+}
+
+.price .grey {
+    background-color: #eee;
+    font-size: 20px;
+}
+.md{
+	color: red;
+    margin-left: 3px;
+}
+.dashbord
+{
+	border:1px solid #30ACA4;
+	min-height:600px;
+}
+#loginform-dash p
+{
+    display: inline;
+}
+.dataTables_wrapper{
+	font-size:13px;
+	font-family:"Courier New", Courier, monospace;
+}
+.dataTables_wrapper table.dataTable.no-footer, .dataTables_wrapper table.dataTable thead th, table.dataTable thead td{
+	border-bottom:none;
+}
+.dataTables_wrapper .table-bordered, .dataTables_wrapper .table-bordered>tbody>tr>td, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>td, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>thead>tr>th {
+    border: 1px solid #30ACA4;
+}
+.editcls
+{
+	font-size:15px;
+	color:#30ACA4;
+}
+.trashcls
+{
+	font-size:15px;
+	color:red;
+}

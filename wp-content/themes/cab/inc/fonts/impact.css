@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'ImpactRegular';
+    src: url('impact.eot');
+    src: url('impact.eot') format('embedded-opentype'),
+         url('impact.woff2') format('woff2'),
+         url('impact.woff') format('woff'),
+         url('impact.ttf') format('truetype'),
+         url('impact.svg#ImpactRegular') format('svg');
+}
