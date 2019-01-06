@@ -11,10 +11,10 @@ $(document).ready(function(){
 		cycleSteps: false,
 		toolbarSettings: {
 			toolbarPosition: 'both',
-			  toolbarButtonPosition: 'end',
-			  toolbarExtraButtons: [btnFinish],
-			  showPreviousButton:false
-			},
+			toolbarButtonPosition: 'end',
+			toolbarExtraButtons: [btnFinish],
+			showPreviousButton:false
+		},
 		anchorSettings: {
 			anchorClickable: false,
 		}
@@ -54,14 +54,14 @@ console.log(obj);
 				},
 				success: function(result) {
 console.log(result);
-					$('#csp').val(result);
+					var data = $.parseJSON(result);
+					Book.SetBookingData(data);
+					$('#csp').val(data.dataenc);
 					return true;
 				}
-
 			});
 			console.log('stepl success');
 			return true;
-
 		}
 
        // return true;
@@ -69,25 +69,42 @@ console.log(result);
 
 	$(document).on('click', ".way", function (){
 		var way = $("input[name='way']:checked").val();
-		if(way=="2"){
+		if(way=="2") {
 			$('.returndateSelect').show('slow');
-		}
-		else
-		{
+		} else {
 			$('.returndateSelect').hide('slow');
 		}
 	});
 
+	$(document).on('click', '.get-quote', function(e) {
+		$("#smartwizard").smartWizard("next");
+	});
 
+	$(document).on('click', '.get-user', function(e) {
+		var error='<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>';
+		var error_close='</div>';
+		var obj = Book.FormData('frm_step3');
+		if(Book.ValidateUser(obj, error, error_close)) {
+			return false;
+		}
+		var response = sendRequest(obj, 3);
+		if(response) {
+console.log('in get user');
+console.log(response);
+			$('#user-id').val(response.data.user_id);
+			$("#smartwizard").smartWizard("next");
+			return true;
+		}
+		return false;
+	});
 
 });
 
 Book = {
-	FinishedClk:function()
-	{
+	bookingData: [],
+	FinishedClk: function() {
 	},
-	FormData:function(frmid)
-	{
+	FormData: function(frmid) {
 		var frmdata=$('form#'+frmid).serializeArray();
 		obj = {};
 		$(frmdata).each(function(i, field){
@@ -95,8 +112,7 @@ Book = {
 		});
 		return obj;
 	},
-	StepsValidate:function(stepNumber)
-	{
+	StepsValidate: function(stepNumber) {
 		var csp = $('#csp').val();
 		var currentURL = window.location.href;
 		var curl = currentURL.split('#step-');
@@ -110,8 +126,7 @@ Book = {
 
 
 	},
-	NextProcess:function(e, anchorObject, stepNumber, stepDirection, stepPosition)
-	{
+	NextProcess: function(e, anchorObject, stepNumber, stepDirection, stepPosition) {
 console.log('NextProcess');
 console.log(anchorObject);
 console.log(stepNumber);
@@ -122,7 +137,10 @@ console.log(stepPosition);
 		if(stepPosition === 'first') {
 		   $(".btn-finish").hide();
 		   $('.sw-btn-next').show();
-		} else if(stepPosition === 'second') {
+		} else if(stepPosition === 'middle') {
+		   $(".btn-finish").hide();
+		   $('.sw-btn-next').hide();
+		} else if(stepPosition === 'third') {
 		   $(".btn-finish").hide();
 		   $('.sw-btn-next').show();
 		} else if(stepPosition === 'final') {
@@ -132,6 +150,60 @@ console.log(stepPosition);
 		   $(".btn-finish").hide();
 		   $('.sw-btn-next').show();
 		}
+	},
+	SetBookingData: function(data) {
+console.log(data);
+		var data = data.data;
+		/*this.bookingData = {
+			from : data.from,
+			to : data.to,
+			extra: data.extra,
+			passengers: data.passengers,
+			meet_greet: data.meet_greet,
+			baby_seat: data.baby_seat,
+			booster_seat: data.booster_seat,
+			wheel_chair: data.wheel_chair,
+			pickup_date: data.pickup_date
+		};*/
+		$('.book-from').html(data.from);
+		$('.book-to').html(data.to);
+		$('.one-way-date').html(data.pickup_date);
+		//$('.distance').html( );
+		$('.passengers').html(data.passengers);
+		$('.baby_seat').html(data.baby_seat);
+		$('.return').html(data.return);
+		$('.booster_seat').html(data.booster_seat);
+		$('.luggage').html(data.luggage);
+		$('.wheelchair').html(data.wheel_chair);
+		$('.meet_greet').html(data.meet_greet);
+	},
+	GetBookingData: function() {
+		console.log(this.bookingData);
+		console.log(this.bookingData.from);
+	},
+	ValidateUser:  function(obj, error, error_close) {
+		var errorStatus = false;
+		if(obj.firstname=="") {
+			$('.step3error').html(error+'Please enter your from name'+error_close)
+			$('#firstname').focus();
+			errorStatus = true;
+		}
+		else if(obj.lastname=="") {
+			$('.step3error').html(error+'Please enter your last name'+error_close)
+			$('#lastname').focus();
+			errorStatus = true;
+		}
+		else if(obj.mobile=="") {
+			$('.step3error').html(error+'Please enter your mobile'+error_close)
+			$('#mobile').focus();
+			errorStatus = true;
+		}
+		else if(obj.email=="") {
+			$('.step3error').html(error+'Please enter your email'+error_close)
+			$('#email').focus();
+			errorStatus = true;
+		}
+		return errorStatus;
 	},
 	ValidateBooking:  function(obj, error, error_close) {
 		var errorStatus = false;
@@ -179,5 +251,26 @@ console.log(stepPosition);
 	}
 };
 
-
+function sendRequest(dataObj, signstep) {
+	var base_url = $('#base_url_pop').val();
+	var ka = $('#ka').val();
+	var url = base_url+'/book_here';
+	data = dataObj;
+	$.ajax({
+		url:url,
+		type:'POST',
+		data: {
+			signstep:signstep,
+			ajaxcall:1,
+			frmdata:data,
+			ka:ka
+		},
+		success: function(result) {
+console.log('sendRequest');
+console.log(result);
+			var data = $.parseJSON(result);
+			return data;
+		}
+	});
+}
 

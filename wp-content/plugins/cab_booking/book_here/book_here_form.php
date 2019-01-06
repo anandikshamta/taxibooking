@@ -43,23 +43,28 @@ class BookHereForm
 						</div>
 					</div>
 				</div>
-				<div class="col-lg-3">&nbsp;<input type="hidden" id="csp"><input type="hidden" id="base_url_pop" value="<?php bloginfo('url')?>"><input type="hidden" id="ka" value="<?php echo $_GET['ka'];?>"></div>
+				<div class="col-lg-3">&nbsp;
+					<input type="hidden" id="csp">
+					<input type="hidden" id="base_url_pop" value="<?php bloginfo('url')?>">
+					<input type="hidden" id="ka" value="<?php echo $_GET['ka'];?>">
+					<input type="hidden" id="user-id"/>
+				</div>
 			</div>
 		<?php
 		$html=ob_get_clean();
 		return $html;
 	}
-	function Options($start=0,$end=0)
-	{
+
+	function Options($start=0,$end=0) {
 		$option='';
 		for($i=$start;$i<$end;$i++):
 			$option.='<option value="'.$i.'">'.$i.'</option>';
 		endfor;
 		return $option;
 	}
-	function Step1()
-	{
-		?>
+
+	function Step1() {
+	?>
 		<form name="frm_step1" id="frm_step1">
 		<div class="container">
 			<div class="row">
@@ -111,7 +116,7 @@ class BookHereForm
 					<div class="col-sm-6">
 						<div class="form-group">
 							<label>Luggage</label>
-							<select name="passengers" class="form-control" id="passengers">
+							<select name="luggage" class="form-control" id="luggage">
 								<?php echo $this->Options(1,20);?>
 							</select>
 						</div>
@@ -249,12 +254,15 @@ class BookHereForm
 
 		</div>
 		</form>
-
 		<?php
 	}
+
 	function Step2() {
-		?>
+	?>
 		<div class="container">
+			<div class="row">
+				<div class="col-sm-11  step2error"></div>
+			</div>
 		  <div class="row">
 
 			<div class="col col-lg-6 card cardbox">
@@ -271,129 +279,252 @@ class BookHereForm
 
 			<div class="col col-lg-5 card cardbox">
 				<div class="row">
-					<div class="col-sm-12">
-						<div class="form-group">
-							Content Display
-						</div>
+					<div class="col-lg-12">
+						<label>From: </label>
+						<span class="book-from"></span>
 					</div>
 				</div>
-
 				<div class="row">
-					<div class="col-lg-12">ggjhhj</div>
+					<div class="col-lg-12">
+						<label>To: </label>
+						<span class="book-to"></span>
+					</div>
 				</div>
-
+				<div class="row">
+					<div class="col-lg-12">
+						<div style="font-size:14px;font-weight: bold;">Date & Time</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-12">
+						<label>One Way Date & Time:</label>
+						<span class="one-way-date"></span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-12">
+						<label>Distance / Time:</label>
+						<span class="distance"></span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-12">
+						<div style="font-size:14px;font-weight: bold;">Options</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-6">
+						<label>Passengers:</label>
+						<span class="passengers"></span>
+					</div>
+					<div class="col-sm-6">
+						<label>Baby Seat:</label>
+						<span class="baby_seat"></span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-6">
+						<label>Return:</label>
+						<span class="return"></span>
+					</div>
+					<div class="col-sm-6">
+						<label>Boost Seat:</label>
+						<span class="booster_seat"></span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-6">
+						<label>Luggage:</label>
+						<span class="luggage"></span>
+					</div>
+					<div class="col-sm-6">
+						<label>Wheelchair:</label>
+						<span class="wheelchair"></span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<label>Meet & Greet:</label>
+						<span class="meet_greet"></span>
+					</div>
+				</div>
 			</div>
-			<div class="col-lg-12 card">
+			<div class="col-lg-11">&nbsp;</div>
+			<div class="col-lg-11 card cardbox">
 				<?php
 					global $wpdb;
-
 					$user_id = get_current_user_id();
-					$query="select * from wp_cab_vehicle where available=1";
-					$result=$wpdb->get_results($query);
-					//$rs=$result[0];
+					$query = "select vehicle.*, drivers.photo as photo from wp_cab_vehicle vehicle".
+							" join wp_cab_drivers drivers on vehicle.id = drivers.vehicle".
+							" where vehicle.available = 1";
+					$result = $wpdb->get_results($query);
 					if( $result ) {
 						foreach($result as $val) {
 				?>
-					<div class="col-sm-3">
-						<div class="form-group">
-							<label>Seats</label>
-							<?php echo $val->seats; ?>
-						</div>
+				<div class="row">
+					<div class="col-sm-4">
+						<img src="<?php echo $val->photo; ?>" alt="Model Image" />
 					</div>
 					<div class="col-sm-3">
 						<div class="form-group">
-							<label>Luggage</label>
-							<?php echo $val->luggage; ?>
+							<div><?php echo $val->brand; ?></div>
+							<div><?php echo $val->seats; ?></div>
+							<div><?php echo $val->luggage; ?></div>
 						</div>
 					</div>
-					<div class="col-sm-3">
-						<div class="form-group">
-							<label>Brand</label>
-							<?php echo $val->brand; ?>
-						</div>
+					<div class="col-sm-1">
+						<a href="javascript:void(0);">
+							<button class="btn btn-success get-quote" data-id="<?php echo $val->id; ?>">Request Quote</button>
+						</a>
 					</div>
+				</div>
 				<?php
 						}
 					}
-
 				?>
 			</div>
 		  </div>
 
 		</div>
 		<?php
-
 	}
 
 	function Step3() {
-		?>
+	?>
+		<form name="frm_step3" id="frm_step3">
 		<div class="container">
+			<div class="row">
+				<div class="col-sm-11  step3error"></div>
+			</div>
 		  <div class="row">
-
-			<div class="col col-lg-4 card cardbox">
+			<div class="col col-lg-6 card cardbox">
 				<div class="row">
 					<div class="col-sm-6">
 						<div class="form-group">
 							<label>First Name<span class="md">*</span></label>
-							<input type="text" class="form-control" name="from" id="from" placeholder="From Address">
+							<input type="text" class="form-control" name="firstname" id="firstname" placeholder="First Name">
 						</div>
 					</div>
-				</div>
-				<div class="row">
-					<div class="col-sm-5">
+					<div class="col-sm-6">
 						<div class="form-group">
-							<label>Surname<span class="md">*</span></label>
-							<input type="text" class="form-control" name="to" id="to" placeholder="To Address">
+							<label>Last Name<span class="md">*</span></label>
+							<input type="text" class="form-control" name="lastname" id="lastname" placeholder="Last Name">
 						</div>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-sm-6">
 						<div class="form-group">
-							<label>Mobile Number<span class="md">*</span></label>
-							<input type="text" class="form-control" name="to" id="to" placeholder="To Address">
+							<label>Mobile<span class="md">*</span></label>
+							<input type="text" class="form-control" name="mobile" id="mobile" placeholder="Mobile">
 						</div>
 					</div>
-				</div>
-				<div class="row">
-					<div class="col-sm-5">
+					<div class="col-sm-6">
 						<div class="form-group">
 							<label>Email<span class="md">*</span></label>
-							<input type="text" class="form-control" name="to" id="to" placeholder="To Address">
+							<input type="text" class="form-control" name="email" id="email" placeholder="Email Address">
 						</div>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-sm-12">
 						<div class="form-group">
-							<label>Remarks<span class="md">*</span></label>
-							<input type="text" class="form-control" name="to" id="to" placeholder="To Address">
+							<label>Remarks</label>
+							<input type="text" class="form-control" name="remarks" id="remarks" placeholder="Remarks">
 						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-1">
+						<button class="btn btn-success get-user" type="button">Create User</button>
 					</div>
 				</div>
 			</div>
 
 			<div class="col col-lg-5 card cardbox">
 				<div class="row">
-					<div class="col-sm-12">
-						<div class="form-group">
-							Content Display
-						</div>
+					<div class="col-lg-12">
+						<label>From: </label>
+						<span class="book-from"></span>
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-lg-12">ggjhhj</div>
+					<div class="col-lg-12">
+						<label>To: </label>
+						<span class="book-to"></span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-12">
+						<div style="font-size:14px;font-weight: bold;">Date & Time</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-12">
+						<label>One Way Date & Time:</label>
+						<span class="one-way-date"></span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-12">
+						<label>Distance / Time:</label>
+						<span class="distance"></span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-12">
+						<div style="font-size:14px;font-weight: bold;">Options</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-6">
+						<label>Passengers:</label>
+						<span class="passengers"></span>
+					</div>
+					<div class="col-sm-6">
+						<label>Baby Seat:</label>
+						<span class="baby_seat"></span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-6">
+						<label>Return:</label>
+						<span class="return"></span>
+					</div>
+					<div class="col-sm-6">
+						<label>Boost Seat:</label>
+						<span class="booster_seat"></span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-6">
+						<label>Luggage:</label>
+						<span class="luggage"></span>
+					</div>
+					<div class="col-sm-6">
+						<label>Wheelchair:</label>
+						<span class="wheelchair"></span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<label>Meet & Greet:</label>
+						<span class="meet_greet"></span>
+					</div>
 				</div>
 			</div>
-
 		  </div>
 		</div>
+		</form>
 		<?php
 	}
 
 	function Step4() {
-		?>
+	?>
 		<div class="container">
+			<div class="row">
+				<div class="col-sm-11  step4error"></div>
+			</div>
 		  <div class="row">
 
 			<div class="col-lg-12 card">
@@ -402,8 +533,6 @@ class BookHereForm
 
 		  </div>
 		</div>
-		<?php
-
+	<?php
 	}
-
 }
