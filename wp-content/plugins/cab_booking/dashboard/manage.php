@@ -26,6 +26,10 @@ class ManageDashboard
 			$vinfo=new Pricinginfo();
 			$data1=$vinfo->display();			
 		endif;
+		if($_REQUEST['action']=="bookings"):
+			$vinfo=new Bookingsinfo();
+			$data1=$vinfo->display();			
+		endif;
 		
 		$arr['Bookings']=get_bloginfo('url')."/cabbooking/?action=bookings";
 		$arr['Jobs']=get_bloginfo('url')."/cabbooking/?action=jobs";

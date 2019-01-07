@@ -13,8 +13,8 @@ class BookHereForm
 
 			<script src="<?php echo plugins_url();?>/cab_booking/inc/js/jquery-3.3.1.min.js"></script>
 			<script src="<?php echo plugins_url();?>/cab_booking/inc/js/jquery-ui.js"></script>
-			<script src="<?php echo plugins_url();?>/cab_booking/inc/js/bootstrap.min.js"></script>
-			<script src="<?php echo plugins_url();?>/cab_booking/inc/js/popper.min.js"></script>
+			
+			
 			<script src="<?php echo plugins_url();?>/cab_booking/inc/js/jquery.smartWizard.min.js"></script>
 			<script src="<?php echo plugins_url();?>/cab_booking/inc/js/book_here.js"></script>
 

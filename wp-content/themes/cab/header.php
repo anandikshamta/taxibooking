@@ -13,7 +13,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>eBusiness Bootstrap Template</title>
+  <title>Cab Booking</title>
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <meta content="" name="keywords">
   <meta content="" name="description">
@@ -28,6 +28,7 @@
   <!-- Bootstrap CSS File -->
   <link href="<?php echo esc_url( get_template_directory_uri() ); ?>/inc/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
+  <?php if(is_front_page()):?>
   <!-- Libraries CSS Files -->
   <link href="<?php echo esc_url( get_template_directory_uri() ); ?>/inc/lib/nivo-slider/css/nivo-slider.css" rel="stylesheet">
   <link href="<?php echo esc_url( get_template_directory_uri() ); ?>/inc/lib/owlcarousel/owl.carousel.css" rel="stylesheet">
@@ -38,7 +39,8 @@
 
   <!-- Nivo Slider Theme -->
   <link href="<?php echo esc_url( get_template_directory_uri() ); ?>/inc/css/nivo-slider-theme.css" rel="stylesheet">
-
+  <?php endif;?>
+  
   <!-- Main Stylesheet File -->
   <link href="<?php echo esc_url( get_template_directory_uri() ); ?>/inc/css/style.css" rel="stylesheet">
 
@@ -70,6 +72,7 @@
 						$current_user = wp_get_current_user();
 						echo ' Welcome :'.$current_user->display_name.' | <a href="'.wp_logout_url( get_permalink() ).'">Logout</a>';
 					else:
+						$redirect=get_bloginfo('url')."/cabbooking/?action=bookings";
 						$args = array(
 							'redirect' => $redirect, 
 							'form_id' => 'loginform-dash',
