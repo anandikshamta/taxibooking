@@ -527,7 +527,12 @@ class BookHereForm
 				<div class="col-sm-11 step4error"></div>
 			</div>
 			<div class="row">
-				<div class="col-lg-11 card">
+				<div class="col-lg-11 card cardbox">
+					<div class="row">
+						<div class="form-group">
+							Payment Confirmation
+						</div>
+					</div>
 					<div class="row">
 						<div class="form-check form-check-inline">
 							<input class="form-check-input cashondelivery" type="radio"
