@@ -19,14 +19,17 @@
   </footer>
 
   <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+  <script src="<?php echo plugins_url();?>/cab_booking/inc/js/bootstrap.min.js"></script>
+  <script src="<?php echo plugins_url();?>/cab_booking/inc/js/popper.min.js"></script>
 <?php
 	if(is_front_page()):
 ?>
   <!-- JavaScript Libraries -->
-  <script src="<?php echo esc_url( get_template_directory_uri() ); ?>/inc/lib/jquery/jquery.min.js"></script>
+	
   
   <script src="<?php echo esc_url( get_template_directory_uri() ); ?>/inc/lib/owlcarousel/owl.carousel.min.js"></script>
   <script src="<?php echo esc_url( get_template_directory_uri() ); ?>/inc/lib/venobox/venobox.min.js"></script>
+  
   <script src="<?php echo esc_url( get_template_directory_uri() ); ?>/inc/lib/knob/jquery.knob.js"></script>
   <script src="<?php echo esc_url( get_template_directory_uri() ); ?>/inc/lib/wow/wow.min.js"></script>
   <script src="<?php echo esc_url( get_template_directory_uri() ); ?>/inc/lib/parallax/parallax.js"></script>

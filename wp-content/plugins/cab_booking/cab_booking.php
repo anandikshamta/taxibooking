@@ -40,6 +40,7 @@ if (!class_exists('CabBooking'))
 		require( dirname( __FILE__ ) . '/dashboard/drivers.php' );
 		require( dirname( __FILE__ ) . '/dashboard/pricing.php' );
 		require( dirname( __FILE__ ) . '/dashboard/price_meta.php' );
+		require( dirname( __FILE__ ) . '/dashboard/bookings.php' );
 		
           
         
@@ -163,7 +164,8 @@ if (!class_exists('CabBooking'))
 				$posts[0]->post_title = "&nbsp;";
                 $posts[0]->post_content= $manage->getMyDashboard();  
             else:
-               $this->PageNotFound();               
+               $url=get_bloginfo('url');          
+			   wp_redirect($url);exit;
             endif;    
       	endif;
       	return $posts;
