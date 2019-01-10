@@ -117,6 +117,7 @@ console.log(data);
 		var base_url = $('#base_url_pop').val();
 		var ka = $('#ka').val();
 		var url = base_url+'/book_here';
+		obj.bookingId = $('#booking-id').val();
 console.log('sendRequest');
 		$.ajax({
 			url:url,
