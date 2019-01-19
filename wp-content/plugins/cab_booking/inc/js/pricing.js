@@ -1,52 +1,52 @@
 $(document).ready( function () {
 	$('.dataTable').DataTable();
-	$(document).on('click', ".process_data", function (){ 	
-		var frmdata=$('form#frm').serializeArray(); 
+	$(document).on('click', ".process_data", function (){
+		var frmdata=$('form#frm').serializeArray();
 		obj = {};
 		$(frmdata).each(function(i, field){
 			obj[field.name] = field.value;
 		});
 		VCL.Validate(obj);
 	});
-	$(document).on('click', ".editit", function (){ 
+	$(document).on('click', ".editit", function (){
 		var id=$(this).data("id");
 		VCL.EditProcess(id);
-		
+
 	});
-	$(document).on('click', ".deleteit", function (){ 	
-		var id=$(this).data("id");		
+	$(document).on('click', ".deleteit", function (){
+		var id=$(this).data("id");
 		VCL.DeleteProcess(id);
 	});
-	$(document).on('click', ".setpricing", function (){ 	
-		var id=$(this).data("id");		
+	$(document).on('click', ".setpricing", function (){
+		var id=$(this).data("id");
 		VCL.MetaProcess(id);
 	});
-	
+
 	var max_fields      = 10; //maximum input boxes allowed
 	var x = 1; //initlal text box count
-	$(document).on('click', ".add_radius", function (){ 	
+	$(document).on('click', ".add_radius", function (){
 		if(x < max_fields){ //max input box allowed
 			x++; //text box increment
 			var wraphtml='<tr><td><input type="text" class="form-control" name="radius_upto_distance_'+x+'" id="radius_upto_distance_'+x+'" value="0"></td><td><input type="text" class="form-control" name="radius_one_way_price_'+x+'" id="radius_one_way_price_'+x+'" value="0"></td><td><input type="text" class="form-control" name="radius_return_price_'+x+'" id="radius_return_price_'+x+'" value="0"></td><td><a href="javascript:;" class="radius_remove"><i class="fa fa-trash trashcls"></i></a></td></tr>';
 			$('.add_radius_fields_wrap').append(wraphtml); //add input box
 		}
-	});	
-	$(document).on("click",".radius_remove", function(e){ //user click on remove text
+	});
+	$(document).on("click", ".radius_remove", function(e){ //user click on remove text
 		$(this).closest('tr').remove(); x--;
 	})
-	
-	$(document).on('click', ".add_hourly_price", function (){ 	
+
+	$(document).on('click', ".add_hourly_price", function (){
 		if(x < max_fields){ //max input box allowed
 			x++; //text box increment
 			var wraphtml='<tr><td><input type="text" class="form-control" name="hourly_hour_'+x+'" id="radius_upto_distance_'+x+'" value="0"></td><td><input type="text" class="form-control" name="hourly_price_'+x+'" id="radius_one_way_price_'+x+'" value="0"></td><td><a href="javascript:;" class="hourly_remove"><i class="fa fa-trash trashcls"></i></a></td></tr>';
 			$('.add_hourly_fields_wrap').append(wraphtml); //add input box
 		}
-	});	
+	});
 	$(document).on("click",".hourly_remove", function(e){ //user click on remove text
 		$(this).closest('tr').remove(); x--;
 	})
-	
-	
+
+
 });
 
 VCL={
@@ -55,18 +55,18 @@ VCL={
 		$('#popupbox').modal();
 		$('.modal-title').html('Add Vechicles');
 		$('.modal-body').html('<div class="loading-icon text-center"><i class="fa fa-spinner fa-spin loader" ></i></div>');
-		
+
 		var base_url=$('#base_url').val();
 		var url = base_url+'/cabbooking/?action=pricing';
 		$.ajax({
 			url:url,
 			type:'POST',
-			data: {	
+			data: {
 				operation:'create'
 			},
-			success: function(result) { 
+			success: function(result) {
 				$('.modal-body').html(result);
-				$( ".datepicker" ).datepicker();	
+				$( ".datepicker" ).datepicker();
 			}
 		});
 	},
@@ -75,19 +75,19 @@ VCL={
 		$('#popupbox').modal();
 		$('.modal-title').html('Edit Vechicles');
 		$('.modal-body').html('<div class="loading-icon text-center"><i class="fa fa-spinner fa-spin loader" ></i></div>');
-		
+
 		var base_url=$('#base_url').val();
 		var url = base_url+'/cabbooking/?action=pricing';
 		$.ajax({
 			url:url,
 			type:'POST',
-			data: {	
+			data: {
 				operation:'create',
 				id:id
 			},
-			success: function(result) { 
+			success: function(result) {
 				$('.modal-body').html(result);
-				$( ".datepicker" ).datepicker();	
+				$( ".datepicker" ).datepicker();
 			}
 		});
 	},
@@ -97,37 +97,37 @@ VCL={
 		$('.modal-title').html('Edit Vechicles');
 		$('.modal-body').html('<div class="loading-icon text-center"><i class="fa fa-spinner fa-spin loader" ></i></div>');
 		$('.modal-dialog').css({"width":"70%"});
-		
+
 		var base_url=$('#base_url').val();
 		var url = base_url+'/cabbooking/?action=pricing';
 		$.ajax({
 			url:url,
 			type:'POST',
-			data: {	
+			data: {
 				operation:'meta_process',
 				id:id
 			},
-			success: function(result) { 
+			success: function(result) {
 				$('.modal-body').html(result);
-				$( ".datepicker" ).datepicker();	
+				$( ".datepicker" ).datepicker();
 			}
 		});
 	},
 	DeleteProcess:function(id)
 	{
 		if(confirm("Are you sure you want to delete?"))
-		{	
+		{
 			$('.alert').remove();
 			var base_url=$('#base_url').val();
 			var url = base_url+'/cabbooking/?action=pricing';
 			$.ajax({
 				url:url,
 				type:'POST',
-				data: {	
+				data: {
 					operation:'delete',
 					id:id
 				},
-				success: function(result) { 
+				success: function(result) {
 					$('.msgdisplay').html(result);
 				}
 			});
@@ -204,6 +204,7 @@ VCL={
 		}
 		else
 		{
+			//document.frm.action="/cabbooking/?action=pricing";
 			document.frm.action="";
 			document.frm.method="POST";
 			document.frm.submit();
