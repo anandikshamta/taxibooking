@@ -80,13 +80,16 @@ class BookHere
 			  array(
 				'ID'          =>    $user_id,
 				'nickname'    =>    '',
-				'role'        =>    ''
+				'role'        =>    'taxidriver'
 			  )
 			);
 			wp_mail( $email, 'Welcome to our Application!', 'Please signup  ' . $password );
 		else:
 			$user_id = username_exists( $param['email'] );
 		endif;
+		if(!empty($param['bookingId'])) {
+			$wpdb->query("update wp_cab_booking set user_id = '".$user_id."' where id=".$param['bookingId']." limit 1;");
+		}
 		$arr['user_id'] = $user_id;
 		$data = json_encode($arr);
 		$dataenc = CabEncrypt($data);

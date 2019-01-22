@@ -2301,7 +2301,17 @@ span.email-notes {
   margin: 0;
   padding-top: 30px;
 }
-
+-
 textarea[name="your-message"] {
     width: 625px;
+}
+
+table.dataTable thead th,
+table.dataTable thead td {
+  padding: 0px !important;
+}
+
+.column-title label {
+  border-bottom: 2px solid #30ACA4;
+  width: 100%;
 }
