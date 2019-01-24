@@ -1,5 +1,6 @@
 $(document).ready( function () {
 	$('.dataTable').DataTable();
+	var wp_url = $('#wp_url').val();
 	$(document).on('click', ".process_data", function (){
 		var frmdata=$('form#frm').serializeArray();
 		obj = {};
@@ -17,34 +18,119 @@ $(document).ready( function () {
 		var id=$(this).data("id");
 		VCL.DeleteProcess(id);
 	});
-	$(document).on('click', ".setpricing", function (){
+	$(document).on('click', ".setpricing", function() {
 		var id=$(this).data("id");
 		VCL.MetaProcess(id);
 	});
-
-	var max_fields      = 10; //maximum input boxes allowed
+	var max_fields = 10; //maximum input boxes allowed
 	var x = 1; //initlal text box count
-	$(document).on('click', ".add_radius", function (){
-		if(x < max_fields){ //max input box allowed
+	/*$(document).on('click', ".add_radius", function() {
+		if(x < max_fields) { //max input box allowed
 			x++; //text box increment
-			var wraphtml='<tr><td><input type="text" class="form-control" name="radius_upto_distance_'+x+'" id="radius_upto_distance_'+x+'" value="0"></td><td><input type="text" class="form-control" name="radius_one_way_price_'+x+'" id="radius_one_way_price_'+x+'" value="0"></td><td><input type="text" class="form-control" name="radius_return_price_'+x+'" id="radius_return_price_'+x+'" value="0"></td><td><a href="javascript:;" class="radius_remove"><i class="fa fa-trash trashcls"></i></a></td></tr>';
+			var wraphtml = '<tr>' +
+			'<td><input type="text" class="form-control" name="radius_upto_distance_'+x+'" id="radius_upto_distance_'+x+'" value="0"></td>'+
+			'<td><input type="text" class="form-control" name="radius_one_way_price_'+x+'" id="radius_one_way_price_'+x+'" value="0"></td><td><input type="text" class="form-control" name="radius_return_price_'+x+'" id="radius_return_price_'+x+'" value="0"></td>'+
+			'<td><a href="javascript:void(0);" class="radius_remove"><i class="fa fa-trash trashcls"></i></a></td>'+
+			'</tr>';
 			$('.add_radius_fields_wrap').append(wraphtml); //add input box
 		}
 	});
 	$(document).on("click", ".radius_remove", function(e){ //user click on remove text
-		$(this).closest('tr').remove(); x--;
-	})
+		$(this).closest('tr').remove();
+		x--;
+	})*/
 
-	$(document).on('click', ".add_hourly_price", function (){
-		if(x < max_fields){ //max input box allowed
+	/*$(document).on('click', ".add_hourly_price", function() {
+		if(x < max_fields) { //max input box allowed
 			x++; //text box increment
-			var wraphtml='<tr><td><input type="text" class="form-control" name="hourly_hour_'+x+'" id="radius_upto_distance_'+x+'" value="0"></td><td><input type="text" class="form-control" name="hourly_price_'+x+'" id="radius_one_way_price_'+x+'" value="0"></td><td><a href="javascript:;" class="hourly_remove"><i class="fa fa-trash trashcls"></i></a></td></tr>';
+			var wraphtml = '<tr>'+
+			'<td><input type="text" class="form-control" name="hourly_hour_'+x+'" id="radius_upto_distance_'+x+'" value="0"></td>'+
+			'<td><input type="text" class="form-control" name="hourly_price_'+x+'" id="radius_one_way_price_'+x+'" value="0"></td>'+
+			'<td><a href="javascript:void(0);" class="hourly_remove"><i class="fa fa-trash trashcls"></i></a></td>'+
+			'</tr>';
 			$('.add_hourly_fields_wrap').append(wraphtml); //add input box
 		}
+	});*/
+
+/*	$('#my-table').Tabledit({
+
+		url: wp_url+'?action=pricing.php',
+		editmethod: 'post',
+  		deletemethod: 'post',
+
+  		// Class for form inputs
+  		inputClass: 'form-control input-sm',
+
+  		// Localization -(en, default) - LowerCase or UpperCase
+
+		lang: 'en',
+
+		// Debug mode
+		debug: false,
+
+  		// Trigger to change for edit mode
+  		eventType: 'click',
+  		editButton: true,
+  		deleteButton: true,
+  		saveButton: true,
+
+  		buttons: {
+			edit: {
+				class: 'btn btn-sm btn-default',
+				html: '<span class="glyphicon glyphicon-pencil"></span>',
+				action: 'edit'
+	    	},
+		    delete: {
+		      class: 'btn btn-sm btn-default',
+		      html: '<span class="glyphicon glyphicon-trash"></span>',
+		      action: 'delete'
+		    },
+		    save: {
+		      class: 'btn btn-sm btn-success',
+		      html: ''
+		    },
+			restore: {
+			  class: 'btn btn-sm btn-warning',
+			  html: 'Restore',
+			  action: 'restore'
+			},
+		    confirm: {
+				class: 'btn btn-sm btn-danger',
+				html: 'Confirm'
+		    }
+	  	},
+	  	onDraw: function () {
+			return;
+	  	},
+	  	// Executed when the ajax request is completed
+		onSuccess: function () {
+			return;
+		},
+
+	  	// Executed when occurred an error on ajax request
+		onFail: function () {
+	    	return;
+		},
+
+		// Executed whenever there is an ajax request
+		onAlways: function () {
+	    	return;
+	  	},
+	 	// Executed before the ajax request
+	  	onAjax: function () {
+	    	return;
+	  	},
+		columns: {
+			identifier: [0, 'id'],
+			editable: [[1, 'col1'], [2, 'col1'], [3, 'col3']]
+		},
 	});
-	$(document).on("click",".hourly_remove", function(e){ //user click on remove text
-		$(this).closest('tr').remove(); x--;
+*/
+	$(document).on("click", ".hourly_remove", function(e){ //user click on remove text
+		$(this).closest('tr').remove();
+		x--;
 	})
+
 
 
 });
@@ -53,7 +139,7 @@ VCL={
 	CreateProcess:function()
 	{
 		$('#popupbox').modal();
-		$('.modal-title').html('Add Vechicles');
+		$('.modal-title').html('Add Pricing');
 		$('.modal-body').html('<div class="loading-icon text-center"><i class="fa fa-spinner fa-spin loader" ></i></div>');
 
 		var base_url=$('#base_url').val();
@@ -73,7 +159,7 @@ VCL={
 	EditProcess:function(id)
 	{
 		$('#popupbox').modal();
-		$('.modal-title').html('Edit Vechicles');
+		$('.modal-title').html('Edit Pricing');
 		$('.modal-body').html('<div class="loading-icon text-center"><i class="fa fa-spinner fa-spin loader" ></i></div>');
 
 		var base_url=$('#base_url').val();
@@ -94,7 +180,7 @@ VCL={
 	MetaProcess:function(id)
 	{
 		$('#popupbox').modal();
-		$('.modal-title').html('Edit Vechicles');
+		$('.modal-title').html('Edit Pricing');
 		$('.modal-body').html('<div class="loading-icon text-center"><i class="fa fa-spinner fa-spin loader" ></i></div>');
 		$('.modal-dialog').css({"width":"70%"});
 
@@ -110,6 +196,7 @@ VCL={
 			success: function(result) {
 				$('.modal-body').html(result);
 				$( ".datepicker" ).datepicker();
+				loadRadiusGrid();
 			}
 		});
 	},
@@ -211,3 +298,58 @@ VCL={
 		}
 	}
 };
+
+
+function loadRadiusGrid() {
+	$("#radiusGrid").jsGrid({
+        height: "30%",
+        width: "100%",
+        filtering: false,
+        inserting: true,
+        editing: true,
+        sorting: true,
+        paging: true,
+        autoload: true,
+        pageSize: 8,
+        pageButtonCount: 5,
+        deleteConfirm: "Do you really want to delete ?",
+        controller: {
+            loadData: function(filter) {
+                /*return $.ajax({
+                    type: "GET",
+                    url: wp_url + "?action=pricing&do_action=crud_radius",
+                    data: filter
+                });*/
+                console.log('loadRadius');
+                return data;
+            },
+            insertItem: function(item) {
+                return $.ajax({
+                    type: "POST",
+                    url: wp_url + "?action=pricing&do_action=crud_radius",
+                    data: item
+                });
+            },
+            updateItem: function(item) {
+                return $.ajax({
+                    type: "PUT",
+                    url: wp_url + "?action=pricing&do_action=crud_radius",
+                    data: item
+                });
+            },
+            deleteItem: function(item) {
+                return $.ajax({
+                    type: "DELETE",
+                    url: wp_url + "?action=pricing&do_action=crud_radius",
+                    data: item
+                });
+            }
+        },
+        fields: [
+            { name: "radius_upto_distance", title: "Up to Distance", type: "text", width: 150 },
+            { name: "radius_one_way_price", title: "One way Price", type: "number", width: 70, filtering: false },
+            { name: "radius_return_price", title: "Return Price", type: "number", width: 70, filtering: false },
+            { type: "control" }
+        ]
+    });
+}

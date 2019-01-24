@@ -1,14 +1,16 @@
 <?php
 class PriceMeta
 {
-	function LoadMeta()
-	{
-		if($_REQUEST['action']=="insert"):
+	function LoadMeta() {
+		if($_REQUEST['action'] == "insert"):
 			//$this->InsertPriceMeta();exit;
+		elseif($_REQUEST['do_action'] == "crud_radius"):
+			$this->CrudRadiusAction(); exit;
+		elseif($_REQUEST['do_action'] == "crud_hourly_price"):
+			$this->CrudHourlyPriceAction(); exit;
 		else:
-			$this->CreatePrice();exit;
+			$this->CreatePrice(); exit;
 		endif;
-
 	}
 
 	function CreatePricing() {
@@ -16,27 +18,58 @@ class PriceMeta
 		exit();
 	}
 
+	function CrudRadiusAction() {
+
+		switch($_SERVER["REQUEST_METHOD"]) {
+		    case "GET":
+		    	$param = new Object();
+		        $result = $this->getRadius();
+		        break;
+		    case "POST":
+		    	$param = new Object();
+		    	$param->radius_upto_distance = $_POST["radius_upto_distance"];
+		    	$param->radius_one_way_price = intval($_POST["radius_one_way_price"]);
+		    	$param->radius_return_price = $_POST["radius_return_price"];
+		        $result = $this->updateRadius($param);
+		        break;
+		    case "PUT":
+		        parse_str(file_get_contents("php://input"), $_PUT);
+		        $param = new Object();
+		        $param->id = intval($_PUT["id"]);
+		        $param->radius_upto_distance = $_PUT["radius_upto_distance"];
+		    	$param->radius_one_way_price = intval($_PUT["radius_one_way_price"]);
+		    	$param->radius_return_price = $_PUT["radius_return_price"];
+		        break;
+		    case "DELETE":
+		        parse_str(file_get_contents("php://input"), $_DELETE);
+		        $result = $this->deleteRadius(intval($_DELETE["id"]));
+		        break;
+		}
+
+		echo json_encode($result);
+		exit();
+	}
+
 	function CreatePrice()
 	{
 		if($_POST['id']):
 			global $wpdb;
-			$did = $_POST['id'];
+			$pricing_id = $_POST['id'];
 			$user_id = get_current_user_id();
 			$query = "select price.*, price_meta_data.*, price_outof_hours.*".
 						" from wp_cab_pricing price".
 						" join wp_cab_pricing_meta_data price_meta_data on price_meta_data.pricing_id = price.id ".
 						" join wp_cab_pricing_meta_out_of_hours_pricing price_outof_hours on price_outof_hours.pricing_id = price.id ".
-						" where price.id=".$did;
-//echo $query;
+						" where price.id=".$pricing_id;
 			$result = $wpdb->get_results($query);
 			$rs = $result[0];
-//print_r($rs);
 		endif;
 		include_once('price_meta.inc.php');
 	}
 
 	function InsertPriceMeta()
 	{
+		//$redirect=get_bloginfo('url');
 		global $wpdb;
 		if($_POST['pricing_id']):
 			$pricingId = $_POST['pricing_id'];
@@ -47,7 +80,6 @@ class PriceMeta
 						" where price.id=".$pricingId;
 			$result = $wpdb->get_results($query);
 			$rs = $result[0];
-//print_r($rs);
 		endif;
 
 		$cuser_id = get_current_user_id();
@@ -56,8 +88,6 @@ class PriceMeta
 		$param->pco_exp_date = date('Y-m-d H:i:s', strtotime($param->pco_exp_date));
 		$param->ins_exp_date = date('Y-m-d H:i:s', strtotime($param->ins_exp_date));
 		$param->created_at = $created_at;
-
-		//print"<pre>";print_r($param);print"</pre>";exit;
 
 		if($param->pricing_id):
 
@@ -83,18 +113,60 @@ class PriceMeta
 			echo $qry_outofhours;
 			$wpdb->query($qry_outofhours);
 
-			/*$qry_radius = "INSERT INTO `wp_cab_pricing_meta_radius_pricing` SET " .
-							$this->raw_price_meta_radius_price($param);;
-			$wpdb->query($qry_radius);
-
-			$qry_radius = "INSERT INTO `wp_cab_pricing_meta_dynamic_hour_price` SET " .
-							$this->raw_price_meta_dynamic_hour_price($param);;
-			$wpdb->query($qry_radius);*/
-
 			$msg = "pricing created successfully";
 		endif;
 		if($msg!=""):
 			echo '<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>'.$msg.'</div>';
+		endif;
+	}
+
+	private function updateRadius($param) {
+		global $wpdb;
+		if($param->id):
+			$qry_radius = "UPDATE `wp_cab_pricing_meta_radius_pricing` SET " . $this->raw_price_meta_radius_price($param) .
+						" WHERE `pricing_id`= $param->id";
+			$wpdb->query($qry_radius);
+			$msg = "Radius updated successfully";
+		else:
+			$qry_radius = "INSERT INTO `wp_cab_pricing_meta_radius_pricing` SET " .
+							$this->raw_price_meta_radius_price($param);
+			$wpdb->query($qry_radius);
+			$msg = "Radius inserted successfully";
+		endif;
+	}
+
+	private function getRadius() {
+		global $wpdb;
+		$qry_radius = "select * from `wp_cab_pricing_meta_radius_pricing`";
+		$result = $wpdb->get_results($qry_radius);
+		//$rs = $result[0];
+		return $result;
+	}
+
+	private function deleteRadius() {
+		global $wpdb;
+		if($param->id):
+			$qry_radius = "DELETE FROM `wp_cab_pricing_meta_radius_pricing` ".
+						" WHERE `pricing_id`= $param->id and id = $id ";
+			$wpdb->query($qry_radius);
+			$msg = "Radius updated successfully";
+		endif;
+	}
+
+	private function updateHourlyPrice() {
+		global $wpdb;
+		if($param->id):
+			$qry_radius = "UPDATE `wp_cab_pricing_meta_radius_pricing` SET " .
+							$this->raw_price_meta_outof_hour_price($param) .
+							" WHERE `pricing_id`= $param->id";
+			$wpdb->query($qry_radius);
+
+			$msg = "Hourly price updated successfully";
+		else:
+			$qry_outofhours = "INSERT INTO `wp_cab_pricing_meta_dynamic_hour_price` SET " .
+							$this->raw_price_meta_outof_hour_price($param);;
+			$wpdb->query($qry_outofhours);
+			$msg = "Hourly price inserted successfully";
 		endif;
 	}
 

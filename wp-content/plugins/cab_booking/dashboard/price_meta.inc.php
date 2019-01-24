@@ -364,6 +364,9 @@
 			<div class="row">
 				<div class="col-sm-12">
 					<div class="form-group">
+
+						<div id="radiusGrid"></div>
+
 						<div class="text-right"><button type="button" name="add_radius" class="btn btn-primary add_radius">Add Radius</button></div>
 						<div class="row">
 							<div class="col-lg-12">&nbsp;</div>

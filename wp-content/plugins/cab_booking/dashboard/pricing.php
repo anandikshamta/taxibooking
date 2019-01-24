@@ -3,23 +3,30 @@ class Pricinginfo
 {
 	function display()
 	{
+print_r($_REQUEST);
 		if($_POST['operation']=="create"):
 			$this->CreateIT();exit;
 		elseif($_POST['operation']=="delete"):
 			$this->DeleteProcess();exit;
 		elseif($_POST['operation']=="meta_process"):
-			$obj=new PriceMeta();
+			$obj = new PriceMeta();
 			$obj->LoadMeta();exit;
 		else:
 			ob_start();
 			if($_POST['createfrm']=="1"):$this->InsertProcess();endif;
 			//if($_POST['createpricing']=="1"):
 			if($_POST['createpricingmeta']=="1"):
-				$obj=new PriceMeta();
+				$obj = new PriceMeta();
 				$obj->CreatePricing();exit;
 			endif;
+			if(isset($_REQUEST['do_action'])):
+				$obj = new PriceMeta();
+				$obj->LoadMeta();exit;
+			endif;
+
+//exit;
 			$this->ListIT();
-			$display=ob_get_clean();
+			$display = ob_get_clean();
 			return $display;
 		endif;
 	}
