@@ -28,22 +28,28 @@ class PriceMeta
 		        break;
 		    case "POST":
 		    	$param = new stdClass();
-		    	$param->radius_upto_distance = $_POST["radius_upto_distance"];
-		    	$param->radius_one_way_price = intval($_POST["radius_one_way_price"]);
-		    	$param->radius_return_price = $_POST["radius_return_price"];
+		    	$param->pricing_id = intval($_POST["pricing_id"]);
+		    	$param->radius_upto_distance = $_POST["upto_distance"];
+		    	$param->radius_one_way_price = intval($_POST["one_way_price"]);
+		    	$param->radius_return_price = $_POST["return_price"];
 		        $result = $this->updateRadius($param);
 		        break;
 		    case "PUT":
 		        parse_str(file_get_contents("php://input"), $_PUT);
 		        $param = new stdClass();
 		        $param->id = intval($_PUT["id"]);
+		        $param->pricing_id = intval($_PUT["pricing_id"]);
 		        $param->radius_upto_distance = $_PUT["radius_upto_distance"];
 		    	$param->radius_one_way_price = intval($_PUT["radius_one_way_price"]);
 		    	$param->radius_return_price = $_PUT["radius_return_price"];
+		    	$result = $this->updateRadius($param);
 		        break;
 		    case "DELETE":
 		        parse_str(file_get_contents("php://input"), $_DELETE);
-		        $result = $this->deleteRadius(intval($_DELETE["id"]));
+		        $param = new stdClass();
+		        $param->id = intval($_DELETE["id"]);
+		        $param->pricing_id = intval($_DELETE["pricing_id"]);
+		        $result = $this->deleteRadius($param);
 		        break;
 		}
 		header("Content-Type: application/json");
@@ -63,7 +69,7 @@ class PriceMeta
 	            array_push($resultObj, $data);
 	        }
     	}
-  //print_r($resultObj);
+//print_r($resultObj);
         return $resultObj;
 	}
 
@@ -160,13 +166,13 @@ class PriceMeta
 		return $result;
 	}
 
-	private function deleteRadius() {
+	private function deleteRadius($param) {
 		global $wpdb;
 		if($param->id):
 			$qry_radius = "DELETE FROM `wp_cab_pricing_meta_radius_pricing` ".
-						" WHERE `pricing_id`= $param->id and id = $id ";
+						" WHERE `pricing_id`= $param->pricing_id and id = $param->id ";
 			$wpdb->query($qry_radius);
-			$msg = "Radius updated successfully";
+			$msg = "Radius deleted successfully";
 		endif;
 	}
 

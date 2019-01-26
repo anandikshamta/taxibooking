@@ -435,7 +435,7 @@
 			<div class="form-group text-center">
 				<input type="hidden" name="createpricingmeta" value="1">
 				<input type="hidden" name="did" value="<?php echo $did; ?>">
-				<input type="hidden" name="pricing_id" value="<?php echo $rs->pricing_id; ?>" />
+				<input type="hidden" name="pricing_id" id="pricing_id" value="<?php echo $rs->pricing_id; ?>" />
 				<button type="button" name="process_meta_data" class="btn btn-primary process_data process_meta_data" value="Submit">Submit</button>
 				<button type="button" name="search_reset" class="btn btn-primary btn-reset" value="Reset">Reset</button>
 			</div>
