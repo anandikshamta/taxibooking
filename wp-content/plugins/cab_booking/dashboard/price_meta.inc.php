@@ -366,39 +366,9 @@
 					<div class="form-group">
 
 						<div id="radiusGrid"></div>
-
+						<!--
 						<div class="text-right"><button type="button" name="add_radius" class="btn btn-primary add_radius">Add Radius</button></div>
-						<div class="row">
-							<div class="col-lg-12">&nbsp;</div>
-						</div>
-
-						<table border="0" cellspacing="0" class="table table-striped table-bordered table-hover table-responsive no-footer dataTable">
-							<thead>
-								<tr>
-									<th>Up to Distance</th>
-									<th>One way Price</th>
-									<th>Return Price</th>
-									<th>Action</th>
-								</tr>
-							</thead>
-							<tbody class="add_radius_fields_wrap">
-								<tr>
-									<td>
-										<input type="text" class="form-control" name="radius_upto_distance_1"
-										id="radius_upto_distance_1" value="0" />
-									</td>
-									<td>
-										<input type="text" class="form-control" name="radius_one_way_price_1"
-										id="radius_one_way_price_1" value="0" />
-									</td>
-									<td>
-										<input type="text" class="form-control" name="radius_return_price_1"
-										id="radius_return_price_1" value="0" />
-									</td>
-									<td></td>
-								</tr>
-							</tbody>
-						</table>
+						-->
 					</div>
 				</div>
 			</div>

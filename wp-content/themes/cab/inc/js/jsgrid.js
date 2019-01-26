@@ -1072,7 +1072,9 @@
             return this._controllerCall("loadData", filter, args.cancel, function(loadedData) {
                 if(!loadedData)
                     return;
-
+console.log('jsgrid');
+console.log(loadedData);
+console.log(this._loadStrategy.loadParams());
                 this._loadStrategy.finishLoad(loadedData);
 
                 this._callEventHandler(this.onDataLoaded, {

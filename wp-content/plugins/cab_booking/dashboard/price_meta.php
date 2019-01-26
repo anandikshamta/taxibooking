@@ -19,14 +19,15 @@ class PriceMeta
 	}
 
 	function CrudRadiusAction() {
-
+//echo $_SERVER["REQUEST_METHOD"];
 		switch($_SERVER["REQUEST_METHOD"]) {
 		    case "GET":
-		    	$param = new Object();
+		    	$param = new stdClass();
 		        $result = $this->getRadius();
+		        $result = $this->formatResponseData($result);
 		        break;
 		    case "POST":
-		    	$param = new Object();
+		    	$param = new stdClass();
 		    	$param->radius_upto_distance = $_POST["radius_upto_distance"];
 		    	$param->radius_one_way_price = intval($_POST["radius_one_way_price"]);
 		    	$param->radius_return_price = $_POST["radius_return_price"];
@@ -34,7 +35,7 @@ class PriceMeta
 		        break;
 		    case "PUT":
 		        parse_str(file_get_contents("php://input"), $_PUT);
-		        $param = new Object();
+		        $param = new stdClass();
 		        $param->id = intval($_PUT["id"]);
 		        $param->radius_upto_distance = $_PUT["radius_upto_distance"];
 		    	$param->radius_one_way_price = intval($_PUT["radius_one_way_price"]);
@@ -45,9 +46,25 @@ class PriceMeta
 		        $result = $this->deleteRadius(intval($_DELETE["id"]));
 		        break;
 		}
-
+		header("Content-Type: application/json");
 		echo json_encode($result);
 		exit();
+	}
+
+	function formatResponseData($result) {
+		$resultObj = [];
+		if(count($result) > 0) {
+	        foreach($result as $row) {
+	        	$data = new stdClass();
+	        	$data->id = $row->id;
+	        	$data->upto_distance = $row->upto_distance;
+	        	$data->oneway_price = $row->oneway_price;
+	        	$data->return_price = $row->oneway_price;
+	            array_push($resultObj, $data);
+	        }
+    	}
+  //print_r($resultObj);
+        return $resultObj;
 	}
 
 	function CreatePrice()

@@ -3,7 +3,7 @@ class Pricinginfo
 {
 	function display()
 	{
-print_r($_REQUEST);
+//print_r($_REQUEST);
 		if($_POST['operation']=="create"):
 			$this->CreateIT();exit;
 		elseif($_POST['operation']=="delete"):
@@ -30,6 +30,7 @@ print_r($_REQUEST);
 			return $display;
 		endif;
 	}
+
 	function ListIT()
 	{
 		global $wpdb;
@@ -86,6 +87,7 @@ print_r($_REQUEST);
 		<?php
 
 	}
+
 	function InsertProcess()
 	{
 		global $wpdb;
@@ -107,6 +109,7 @@ print_r($_REQUEST);
 		endif;
 		echo '<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>'.$msg.'</div>';
 	}
+
 	function DeleteProcess()
 	{
 		global $wpdb;
@@ -117,6 +120,7 @@ print_r($_REQUEST);
 		echo '<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>'.$msg.'</div>';
 		exit;
 	}
+
 	function CreateIT()
 	{
 		if($_POST['id']):

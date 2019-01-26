@@ -49,7 +49,7 @@
 	?>
 	<script src="<?php echo esc_url( get_template_directory_uri() ); ?>/inc/lib/bootstrap/js/bootstrap.min.js"></script>
   <script src="<?php echo esc_url( get_template_directory_uri() ); ?>/inc/js/jquery.tabledit.js"></script>
-  <script src="<?php echo esc_url( get_template_directory_uri() ); ?>/inc/js/jsgrid.min.js"></script>
+  <script src="<?php echo esc_url( get_template_directory_uri() ); ?>/inc/js/jsgrid.js"></script>
 	<?php
 	wp_footer(); ?>
 

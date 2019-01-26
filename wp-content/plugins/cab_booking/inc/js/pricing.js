@@ -301,6 +301,8 @@ VCL={
 
 
 function loadRadiusGrid() {
+	var wp_url = $('#wp_url').val();
+	wp_url = wp_url + '/cabbooking/';
 	$("#radiusGrid").jsGrid({
         height: "30%",
         width: "100%",
@@ -315,13 +317,14 @@ function loadRadiusGrid() {
         deleteConfirm: "Do you really want to delete ?",
         controller: {
             loadData: function(filter) {
-                /*return $.ajax({
+console.log(wp_url);
+            	console.log('loadRadius');
+                return $.ajax({
                     type: "GET",
                     url: wp_url + "?action=pricing&do_action=crud_radius",
                     data: filter
-                });*/
-                console.log('loadRadius');
-                return data;
+                });
+                //return data;
             },
             insertItem: function(item) {
                 return $.ajax({
@@ -346,9 +349,10 @@ function loadRadiusGrid() {
             }
         },
         fields: [
-            { name: "radius_upto_distance", title: "Up to Distance", type: "text", width: 150 },
-            { name: "radius_one_way_price", title: "One way Price", type: "number", width: 70, filtering: false },
-            { name: "radius_return_price", title: "Return Price", type: "number", width: 70, filtering: false },
+        	{ name: "id", title: "Id", type: "number", css: "hide", width: 10 },
+            { name: "upto_distance", title: "Up to Distance", type: "text", width: 50 },
+            { name: "oneway_price", title: "One way Price", type: "text", width: 50, filtering: false },
+            { name: "return_price", title: "Return Price", type: "text", width: 50, filtering: false },
             { type: "control" }
         ]
     });
