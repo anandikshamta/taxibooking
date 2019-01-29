@@ -23,7 +23,7 @@ class PriceMeta
 		    case "GET":
 		    	$param = new stdClass();
 		        $result = $this->getRadius();
-		        $result = $this->formatResponseData($result);
+		        $result = $this->formatResponseData($result, 'curd_radius');
 		        break;
 		    case "POST":
 		    	$param = new stdClass();
@@ -61,24 +61,22 @@ class PriceMeta
 		    case "GET":
 		    	$param = new stdClass();
 		        $result = $this->getHourlyPrice();
-		        $result = $this->formatResponseData($result);
+		        $result = $this->formatResponseData($result, 'curd_hour');
 		        break;
 		    case "POST":
 		    	$param = new stdClass();
 		    	$param->pricing_id = intval($_POST["pricing_id"]);
-		    	$param->radius_upto_distance = $_POST["upto_distance"];
-		    	$param->radius_oneway_price = intval($_POST["oneway_price"]);
-		    	$param->radius_return_price = $_POST["return_price"];
+		    	$param->dynamic_price_hour = $_POST["hour"];
+		    	$param->dynamic_price_per_hour = $_POST["price_per_hour"];
 		        $result = $this->updateHourlyPrice($param);
 		        break;
 		    case "PUT":
 		        parse_str(file_get_contents("php://input"), $_PUT);
 		        $param = new stdClass();
 		        $param->id = intval($_PUT["id"]);
-		        $param->pricing_id = intval($_PUT["pricing_id"]);
-		        $param->radius_upto_distance = $_PUT["upto_distance"];
-		    	$param->radius_oneway_price = intval($_PUT["oneway_price"]);
-		    	$param->radius_return_price = $_PUT["return_price"];
+		        $param->pricing_id = $_PUT["pricing_id"];
+		        $param->dynamic_price_hour = $_PUT["hour"];
+		    	$param->dynamic_price_per_hour = $_PUT["price_per_hour"];
 		    	$result = $this->updateHourlyPrice($param);
 		        break;
 		    case "DELETE":
@@ -95,17 +93,28 @@ class PriceMeta
 	}
 
 
-	function formatResponseData($result) {
+	function formatResponseData($result, $do_action) {
 		$resultObj = [];
 		if(count($result) > 0) {
-	        foreach($result as $row) {
-	        	$data = new stdClass();
-	        	$data->id = $row->id;
-	        	$data->upto_distance = $row->upto_distance;
-	        	$data->oneway_price = $row->oneway_price;
-	        	$data->return_price = $row->return_price;
-	            array_push($resultObj, $data);
-	        }
+			if($do_action == 'curd_radius') {
+				foreach($result as $row) {
+		        	$data = new stdClass();
+		        	$data->id = $row->id;
+		        	$data->upto_distance = $row->upto_distance;
+		        	$data->oneway_price = $row->oneway_price;
+		        	$data->return_price = $row->return_price;
+		            array_push($resultObj, $data);
+		        }
+			}
+			if($do_action == 'curd_hour') {
+				foreach($result as $row) {
+		        	$data = new stdClass();
+		        	$data->id = $row->id;
+		        	$data->hour = $row->dynamic_price_hour;
+		        	$data->price_per_hour = $row->dynamic_price_per_hour;
+		            array_push($resultObj, $data);
+		        }
+			}
     	}
 //print_r($resultObj);
         return $resultObj;
@@ -221,8 +230,8 @@ class PriceMeta
 		$cuser_id = get_current_user_id();
 		$param->created_at = date('Y-m-d H:i:s');
 		if($param->id):
-			$qry_outofhours = "UPDATE `wp_cab_pricing_meta_radius_pricing` SET " .
-							$this->raw_price_meta_outof_hour_price($param) .
+			$qry_outofhours = "UPDATE `wp_cab_pricing_meta_dynamic_hour_price` SET " .
+							$this->raw_price_meta_dynamic_hour_price($param) .
 							" WHERE `pricing_id` = $param->pricing_id " .
 							" and `id` = $param->id ";
 			$wpdb->query($qry_outofhours);
@@ -230,7 +239,7 @@ class PriceMeta
 			$msg = "Hourly price updated successfully";
 		else:
 			$qry_outofhours = "INSERT INTO `wp_cab_pricing_meta_dynamic_hour_price` SET " .
-							$this->raw_price_meta_outof_hour_price($param);
+							$this->raw_price_meta_dynamic_hour_price($param);
 			$wpdb->query($qry_outofhours);
 			$msg = "Hourly price inserted successfully";
 		endif;
@@ -278,8 +287,8 @@ class PriceMeta
 
 	private function raw_price_meta_dynamic_hour_price($param) {
 		$raw_qry = "`pricing_id` = '" . $param->pricing_id . "',
-		`dynamic_price_per_hour` = '" . $param->dynamic_price_per_hour . "',
 		`dynamic_price_hour` = '" . $param->dynamic_price_hour . "',
+		`dynamic_price_per_hour` = '" . $param->dynamic_price_per_hour . "',
 		`created_at` = '" . $param->created_at . "',
 		`modified_at` = '" . $param->created_at . "' ";
 		return $raw_qry;

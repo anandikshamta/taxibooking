@@ -91,6 +91,7 @@ VCL={
 				$('.modal-body').html(result);
 				$( ".datepicker" ).datepicker();
 				loadRadiusGrid();
+				loadHourlyPriceGrid();
 			}
 		});
 	},
@@ -196,7 +197,7 @@ function loadRadiusGrid() {
         controller: {
             loadData: function(filter) {
 console.log(wp_url);
-            	console.log('loadRadius');
+console.log('loadRadius');
                 return $.ajax({
                     type: "GET",
                     url: wp_url + "?action=pricing&do_action=crud_radius",
@@ -260,7 +261,7 @@ function loadHourlyPriceGrid() {
         deleteConfirm: "Do you really want to delete ?",
         controller: {
             loadData: function(filter) {
-console.log('loadRadius');
+console.log('loadHourlyPriceGrid');
                 return $.ajax({
                     type: "GET",
                     url: wp_url + "?action=pricing&do_action=crud_hourly_price",

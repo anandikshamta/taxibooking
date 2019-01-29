@@ -399,7 +399,7 @@
 						<div class="row">
 							<div class="col-lg-12">&nbsp;</div>
 						</div>
-						<table border="0" cellspacing="0" class="table table-striped table-bordered table-hover table-responsive no-footer dataTable">
+						<!-- <table border="0" cellspacing="0" class="table table-striped table-bordered table-hover table-responsive no-footer dataTable">
 							<thead>
 								<tr>
 									<th>Hour</th>
@@ -420,7 +420,7 @@
 									<td></td>
 								</tr>
 							</tbody>
-						</table>
+						</table> -->
 					</div>
 				</div>
 			</div>
