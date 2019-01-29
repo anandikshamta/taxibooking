@@ -393,7 +393,9 @@
 				<div class="col-sm-12">
 					<div class="form-group">
 						<label>Dynamic Hourly Price (Hour/Price)</label><br style="clear:both;">
-						<div class="text-right"><button type="button" name="add_hourly_price" class="btn btn-primary add_hourly_price">Add hourly price</button></div>
+						<div id="hourlyPriceGrid"></div>
+
+						<!-- <div class="text-right"><button type="button" name="add_hourly_price" class="btn btn-primary add_hourly_price">Add hourly price</button></div> -->
 						<div class="row">
 							<div class="col-lg-12">&nbsp;</div>
 						</div>
