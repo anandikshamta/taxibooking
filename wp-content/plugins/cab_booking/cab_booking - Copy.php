@@ -40,8 +40,8 @@ if (!class_exists('CabBooking'))
 		require( dirname( __FILE__ ) . '/dashboard/drivers.php' );
 		require( dirname( __FILE__ ) . '/dashboard/pricing.php' );
 		require( dirname( __FILE__ ) . '/dashboard/price_meta.php' );
-		require( dirname( __FILE__ ) . '/dashboard/bookings.php' );
-
+		//add new page
+    //require( dirname( __FILE__ ) . '/dashboard/bookings.php' );
 
 
     }
@@ -147,31 +147,27 @@ if (!class_exists('CabBooking'))
     function page_filter($posts)
     {
      	global $wp_query;
+		if ( !is_admin() && ($wp_query->query_vars['pagename']=="book_here")):
+			$obj=new BookHere();
+			$posts[0]->post_title = "&nbsp;";
+			$posts[0]->post_content= $obj->BookCab();
+      	endif;
+		if ( !is_admin() && ($wp_query->query_vars['pagename']=="company_signup")):
+			$obj=new CompanySignup();
+			$posts[0]->post_title = "&nbsp;";
+			$posts[0]->post_content= $obj->Register();
+      	endif;
 
-  		if ( !is_admin() && ($wp_query->query_vars['pagename']=="book_here")):
-  			$obj=new BookHere();
-  			$posts[0]->post_title = "&nbsp;";
-  			$posts[0]->post_content= $obj->BookCab();
-        	endif;
-  		if ( !is_admin() && ($wp_query->query_vars['pagename']=="company_signup")):
-  			$obj=new CompanySignup();
-  			$posts[0]->post_title = "&nbsp;";
-  			$posts[0]->post_content= $obj->Register();
-        	endif;
-
-  		if ( !is_admin() && ($wp_query->query_vars['pagename']=="cabbooking")):
-        if ( is_user_logged_in() ):
-  	      $manage=new ManageDashboard();
-          //if(count($posts) > 0):
-  	        $posts[0]->post_title = "&nbsp;";
-            $posts[0]->post_content= $manage->getMyDashboard();
-          //endif;
-        else:
-           $url=get_bloginfo('url');
-           wp_redirect($url);exit;
-        endif;
-    	endif;
-      return $posts;
+		if ( !is_admin() && ($wp_query->query_vars['pagename']=="cabbooking")):
+            if ( is_user_logged_in() ):
+				$manage=new ManageDashboard();
+				$posts[0]->post_title = "&nbsp;";
+                $posts[0]->post_content= $manage->getMyDashboard();
+            else:
+               $this->PageNotFound();
+            endif;
+      	endif;
+      	return $posts;
     }
 
     private function deletePage($hard = false)

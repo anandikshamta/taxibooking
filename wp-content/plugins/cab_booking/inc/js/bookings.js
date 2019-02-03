@@ -1,33 +1,33 @@
 $(document).ready( function () {
-	
+
 	$('.dataTable').DataTable();
 	//$( ".dataTables_filter" ).prepend('<div class="col-sm-4"><a href="javascript:;" id="add_bookings" class="btn btn-sm btn-success">Add bookings</a></div>');
 
-    $(document).on('click', "#add_bookings", function (){ 		
+    $(document).on('click', "#add_bookings", function (){
 		VCL.CreateProcess();
     });
-	$(document).on('click', ".process_data", function (){ 	
-		var frmdata=$('form#frm').serializeArray(); 
+	$(document).on('click', ".process_data", function (){
+		var frmdata=$('form#frm').serializeArray();
 		obj = {};
 		$(frmdata).each(function(i, field){
 			obj[field.name] = field.value;
 		});
 		VCL.Validate(obj);
 	});
-	$(document).on('click', ".editit", function (){ 
+	$(document).on('click', ".editit", function (){
 		var id=$(this).data("id");
 		VCL.EditProcess(id);
-		
+
 	});
-	$(document).on('click', ".deleteit", function (){ 	
-		var id=$(this).data("id");		
+	$(document).on('click', ".deleteit", function (){
+		var id=$(this).data("id");
 		VCL.DeleteProcess(id);
 	});
-	$(document).on('click', ".uploadphoto", function (){ 	
+	$(document).on('click', ".uploadphoto", function (){
 		$('#driver_photo').trigger('click');
 	});
-	
-	
+
+
 });
 
 VCL={
@@ -37,18 +37,18 @@ VCL={
 		$('.modal-title').html('Add bookings');
 		$('.modal-body').html('<div class="loading-icon text-center"><i class="fa fa-spinner fa-spin loader" ></i></div>');
 		$('.modal-dialog').css({"width":"70%"});
-		
+
 		var base_url=$('#base_url').val();
 		var url = base_url+'/cabbooking/?action=bookings';
 		$.ajax({
 			url:url,
 			type:'POST',
-			data: {	
+			data: {
 				operation:'create'
 			},
-			success: function(result) { 
+			success: function(result) {
 				$('.modal-body').html(result);
-				$( ".datepicker" ).datepicker();	
+				$( ".datepicker" ).datepicker();
 			}
 		});
 	},
@@ -58,37 +58,37 @@ VCL={
 		$('.modal-title').html('Edit bookings');
 		$('.modal-body').html('<div class="loading-icon text-center"><i class="fa fa-spinner fa-spin loader" ></i></div>');
 		$('.modal-dialog').css({"width":"70%"});
-		
+
 		var base_url=$('#base_url').val();
 		var url = base_url+'/cabbooking/?action=bookings';
 		$.ajax({
 			url:url,
 			type:'POST',
-			data: {	
+			data: {
 				operation:'create',
 				id:id
 			},
-			success: function(result) { 
+			success: function(result) {
 				$('.modal-body').html(result);
-				$( ".datepicker" ).datepicker();	
+				$( ".datepicker" ).datepicker();
 			}
 		});
 	},
 	DeleteProcess:function(id)
 	{
 		if(confirm("Are you sure you want to delete?"))
-		{	
+		{
 			$('.alert').remove();
 			var base_url=$('#base_url').val();
 			var url = base_url+'/cabbooking/?action=bookings';
 			$.ajax({
 				url:url,
 				type:'POST',
-				data: {	
+				data: {
 					operation:'delete',
 					id:id
 				},
-				success: function(result) { 
+				success: function(result) {
 					$('.msgdisplay').html(result);
 				}
 			});
@@ -119,7 +119,7 @@ VCL={
 			$('.populatemessage').html(popup_error+'Please enter your email'+popup_error_close);
 			$('#email').focus();
 		}
-		else if (!filter.test(obj.email)) 
+		else if (!filter.test(obj.email))
 		{
 			$('.populatemessage').html(popup_error+'Please enter your valid email id'+popup_error_close)
 			$('#email').focus();
